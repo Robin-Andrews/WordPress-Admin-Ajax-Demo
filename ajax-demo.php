@@ -33,3 +33,12 @@ function raad_load_scripts($hook) {
 }
 
 add_action('admin_enqueue_scripts', 'raad_load_scripts');
+
+function raad_process_ajax() {
+
+    echo 'This is my response';
+
+    die();
+}
+
+add_action('wp_ajax_raad_get_results', 'raad_process_ajax');

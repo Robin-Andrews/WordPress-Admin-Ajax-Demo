@@ -1,3 +1,14 @@
 jQuery(document).ready(function ($) {
-    console.log('Greetings Human!');
+    $('#raad-form').submit(function () {
+
+        data = {
+            action: 'raad_get_results'
+        };
+
+        $.post(ajaxurl, data, function (response) {
+            alert(response);
+        });
+
+        return false;
+    });
 });
