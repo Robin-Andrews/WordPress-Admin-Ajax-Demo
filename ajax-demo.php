@@ -5,7 +5,8 @@
  */
 
 function raad_admin_page() {
-    $raad_aettings = add_options_page(__('Ajax Demo', 'raad'), __('Ajax Demo', 'raad'), 'manage_options', 'ajax-demo', 'raad_render_admin');
+    global $raad_settings;
+    $raad_settings = add_options_page(__('Ajax Demo', 'raad'), __('Ajax Demo', 'raad'), 'manage_options', 'ajax-demo', 'raad_render_admin');
 }
 
 add_action('admin_menu', 'raad_admin_page');
@@ -24,7 +25,8 @@ function raad_render_admin() {
 }
 
 function raad_load_scripts($hook) {
-    if ($hook != 'settings_page_ajax-demo') {
+    global $raad_settings;
+    if ($hook != $raad_settings) {
         return;
     }
     wp_enqueue_script('custom-js', plugins_url('js/raad-ajax.js', __FILE__));
