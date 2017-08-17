@@ -20,6 +20,7 @@ function raad_render_admin() {
                 <input type="submit" name="raad-submit" class="button-primary" value="<?php _e('get results', 'raad'); ?>"> 
             </div>
         </form>
+        <div id="raad-results"></div>
     </div>
     <?php
 }
@@ -36,7 +37,18 @@ add_action('admin_enqueue_scripts', 'raad_load_scripts');
 
 function raad_process_ajax() {
 
-    echo 'This is my response';
+    $my_posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 4));
+    
+    if ( $my_posts ):
+        echo '<ul>';
+           foreach($my_posts as $my_post){
+               echo '<li>' . get_the_title($my_post->ID) . '<a href="' . get_the_permalink($my_post->ID) . '"> ' . __('view post', 'raad') . '</a></li>';
+           }
+        echo '</ul>';
+        
+    else: 
+        echo '<p>' . __('No results found', 'raad') . '</p>';
+    endif;
 
     die();
 }

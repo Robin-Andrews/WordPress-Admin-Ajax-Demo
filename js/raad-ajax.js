@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
         };
 
         $.post(ajaxurl, data, function (response) {
-            alert(response);
+           $('#raad-results').html(response);
         });
 
         return false;
