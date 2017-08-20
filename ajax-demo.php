@@ -17,7 +17,8 @@ function raad_render_admin() {
         <h2><?php _e('Ajax Demo', 'raad'); ?></h2>
         <form id="raad-form" method="post">
             <div>
-                <input type="submit" name="raad-submit" class="button-primary" value="<?php _e('get results', 'raad'); ?>"> 
+                <input type="submit" id="raad_submit" name="raad-submit" class="button-primary" value="<?php _e('get results', 'raad'); ?>">
+                <img id="raad_loading" src="<?= admin_url( '/images/wpspin_light.gif' ); ?>" style="display: none;">
             </div>
         </form>
         <div id="raad-results"></div>
@@ -30,12 +31,19 @@ function raad_load_scripts($hook) {
     if ($hook != $raad_settings) {
         return;
     }
-    wp_enqueue_script('custom-js', plugins_url('js/raad-ajax.js', __FILE__));
+    wp_enqueue_script('raad-ajax', plugins_url('js/raad-ajax.js', __FILE__), array('jquery'));
+    wp_localize_script('raad-ajax', 'raad_vars', array(
+        'raad_nonce' => wp_create_nonce('raad-nonce')
+    ));
 }
 
 add_action('admin_enqueue_scripts', 'raad_load_scripts');
 
 function raad_process_ajax() {
+    
+    if( !isset($_POST['raad_nonce']) || !wp_verify_nonce( $_POST['raad_nonce'], 'raad-nonce' )){
+        die('permissions check failed');
+    }
 
     $my_posts = get_posts(array('post_type' => 'post', 'posts_per_page' => 4));
     
